@@ -28,7 +28,7 @@
     'description': "",
     'author': 'eram',
     'website': 'https://www.odoo.com/page/crm',
-    'depends': ['web','website','checklist','project'],
+    'depends': ['web','website','a0c_third_party_logistics','project'],
     'external_dependencies': {'python': ['cairo', 'rsvg']},
     'data': [
         'view/project_website_template.xml',

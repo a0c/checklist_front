@@ -12,7 +12,7 @@ from openerp.http import request
 from openerp import SUPERUSER_ID
 from openerp.tools.translate import _
 from openerp.addons.website.models.website import slug
-from openerp.addons.checklist.models.utils import prs, fmt, diff
+from openerp.addons.a0c_third_party_logistics.models.utils import prs, fmt, diff
 import operator
 
 _logger = logging.getLogger(__name__)
@@ -26,7 +26,7 @@ class Checklistfront(http.Controller):
         cr, uid, context, pool = request.cr, request.uid, request.context, request.registry
         active = []
         completed= []
-        started, unstarted = [http.request.env.ref('checklist.' + st) for st in 'project_tt_started', 'project_tt_unstarted']
+        started, unstarted = [http.request.env.ref('a0c_third_party_logistics.' + st) for st in 'project_tt_started', 'project_tt_unstarted']
         done = http.request.env.ref('project.project_tt_deployment')
         project_ob = http.request.env['project.project']
         projects = project_ob.search([('state', 'not in', ['close', 'cancelled']), ('type_cl', '=', 'onsite'),
@@ -68,7 +68,7 @@ class Checklistfront(http.Controller):
     def load_task_details(self, task):
 
         Tasks = http.request.env['project.task']
-        started, unstarted = [http.request.env.ref('checklist.' + st) for st in 'project_tt_started', 'project_tt_unstarted']
+        started, unstarted = [http.request.env.ref('a0c_third_party_logistics.' + st) for st in 'project_tt_started', 'project_tt_unstarted']
         done = http.request.env.ref('project.project_tt_deployment')
         status = 'unstarted'
         pause = False

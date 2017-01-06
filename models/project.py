@@ -1,6 +1,6 @@
 from openerp import models, fields, api
 from datetime import datetime
-from openerp.addons.checklist.models.utils import fmt
+from openerp.addons.a0c_third_party_logistics.models.utils import fmt
 
 
 class ProjecTTask(models.Model):
@@ -9,7 +9,7 @@ class ProjecTTask(models.Model):
 
     #   Skip a task
     def task_skip(self):
-        skipped = self.env.ref('checklist.project_tt_skipped')
+        skipped = self.env.ref('a0c_third_party_logistics.project_tt_skipped')
         self.with_context(stage=skipped.id).task_done()
         self.mapped('work_ids').unlink()
 
