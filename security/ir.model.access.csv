@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_project_task,project.task,project.model_project_task,checklist_user_group,1,1,1,1
+access_project_project,project.project,project.model_project_project,checklist_user_group,1,1,1,1
+access_project_task_work,project.task.work,project.model_project_task_work,checklist_user_group,1,1,1,1
+access_project_task_history,project.task.history,project.model_project_task_history,checklist_user_group,1,1,1,0
+access_project_task_type,project.task.type,project.model_project_task_type,checklist_user_group,1,0,0,0
+access_account_analytic_account,account.analytic.account,project.model_account_analytic_account,checklist_user_group,1,1,1,0

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <!-- Create Group -->
+        <record id="technician" model="res.groups">
+            <field name="name" >Technician</field>
+        </record>
+<!--
+        <record id="view_checklist_edit_project_inherited" model="ir.ui.view">
+            <field name="name">project.project.form.inherited</field>
+            <field name="model">project.project</field>
+            <field name="inherit_id" ref="checklist.edit_project"/>
+            <field name="arch" type="xml">
+                <group name="misc" position="after">
+                    <group string="Signature" name="sign">
+                        <field name="signature" widget="image" />
+                    </group>
+                </group>
+            </field>
+        </record>
+        
+        <record id="view_project_task_inherited_form" model="ir.ui.view">
+            <field name="name">project.task.inherited</field>
+            <field name="model">project.task</field>
+            <field name="inherit_id" ref="project.view_task_form2"/>
+            <field name="arch" type="xml">
+                <notebook position="inside">
+                    <page string="Images" autofocus="autofocus">
+                        <field name="cam_images" mode="kanban" context="{'default_name': 'Image', 'default_type': 'binary'}">
+                                <kanban>
+                                    <field name="name"/>
+                                    <field name="type"/>
+                                    <field name="db_datas"/>
+                                    <templates>
+                                        <t t-name="kanban-box">
+                                            <div style="position: relative">
+                                                <a t-if="! read_only_mode" type="delete" style="position: absolute; right: 0; padding: 4px; diplay: inline-block">X</a>
+                                                <div class="oe_module_vignette">
+                                                    <a type="open">
+                                                        <img t-att-src="'data:image/png;base64,'+record.db_datas.raw_value" class="oe_avatar oe_kanban_avatar_smallbox"/>                                                    
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </t>
+                                    </templates>
+                                </kanban>
+                                <form string="Images">
+                                    <sheet>
+                                        <field name="db_datas" widget='image' options='{"preview_image": "db_datas"}'/>                                              
+                                        <field name="name" invisible="1"/>
+                                        <field name="type" invisible="1"/>                                  
+                                    </sheet>
+                                </form>
+                            </field>
+                        </page>
+                </notebook>
+            </field>
+        </record>
+          -->
+          
+        <record id="menu_project" model="website.menu">
+            <field name="name">Projects</field>
+            <field name="url">/checklist/checklist</field>
+            <field name="parent_id" ref="website.main_menu"/>
+            <field name="sequence" type="int">1</field>
+        </record>
+        <record id="action_open_project_checklist6" model="ir.actions.act_url">
+            <field name="name">My Projects</field>
+            <field name="target">self</field>
+            <field name="url">/checklist/checklist#tutorial.shop=true</field>
+        </record>
+    </data>
+</openerp>

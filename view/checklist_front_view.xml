@@ -1,0 +1,450 @@
+<openerp>
+    <data>
+
+        <template id="checklist_front_js" name="checklist_front_js" inherit_id="checklist_front.assets_frontend">
+            <xpath expr="." position="inside">
+                <script type="text/javascript" src="/checklist_front/static/src/js/checklist_front.js"/>
+            </xpath>
+        </template>
+
+        <!-- ################## Checklists ################## -->
+        <template id="projectview">
+            <t t-call="checklist_front.layout">
+                <t t-set="checklisthome" t-value="true"/>
+                <t t-set="title">CheckList</t>
+                <t t-set="pageheader">
+                    <span class="screen-name">My Checklists</span>
+                    <!--<a href="#"><img t-attf-src="/checklist_front/static/img/logo.png" width="100" alt=""/></a>--> <!-- Logo -->
+                    <a href="javascript:void(0)" class="app-name">Welcome <t t-esc="user.name"/></a>
+                </t>
+                <div class="app-content home">
+                    <ul class="nav nav-tabs">
+                      <li class="active"><a href="#active" data-toggle="tab" aria-expanded="true">ACTIVE</a></li>
+                      <li class=""><a href="#completed" data-toggle="tab" aria-expanded="false">COMPLETED</a></li>
+                    </ul>
+                    <div id="myTabContent" class="tab-content">
+                        <!-- Active Checklists -->
+                        <div class="tab-pane fade active in" id="active">
+		                    <div class="checklist-wrap">
+                                <t t-foreach="projects" t-as="project">
+                                     <t t-if = "project['status'] == 'started'">
+                                         <t t-set="checklistitem" t-value="'checklist-item checklist-bar current-checklist clearfix'"/>
+                                     </t>
+                                     <t t-if = "project['status'] != 'started'">
+                                        <t t-set="checklistitem" t-value="'checklist-item checklist-bar clearfix'"/>
+                                     </t>
+                                     <div t-att-class="checklistitem">
+                                        <div class="drag-item">
+                                            <t t-set="checklisttitle" t-value="'checklist-title dragend-page'"/>
+                                            <!-- Swipe button -->
+                                            <t t-if="project['all_done']">
+                                                <t t-set="checklisttitle" t-value="'checklist-title swipe-indicate dragend-page'"/>
+                                            </t>
+                                            <div t-att-class="checklisttitle">
+                                                <i class="fa fa-address-card-o hov" aria-hidden="true"
+                                                   data-toggle="popover"
+                                                   data-container="body"
+                                                   t-att-data-content="project['customer'].name"
+                                                   t-att-data-mobile="project['customer'].mobile"
+                                                   t-att-data-phone="project['customer'].phone"
+                                                   t-att-data-street="project['customer'].street"
+                                                   t-att-data-name="project['customer'].name">
+
+                                                </i>
+                                                <div class="title-text" t-attf-data-checklist="#checklist_#{project_index}" t-att-data-project="slug(project['project'])" >
+                                                    <span class="checklist-name"><t t-esc="project['project'].display_name"/></span>
+                                                    <span class="checklist-date"><t t-esc="project['project'].date_start"/></span>
+                                                    <input type="hidden" class="project_id" t-att-value="project['project'].id"/>
+                                                </div>
+                                            </div>
+                                             <!-- cancel or done -->
+                                             <div class="checklist-title swiped dragend-page">
+                                                <ul>
+                                                  <li><a t-attf-href="/checklist/done/{{slug(project['project'])}}">Done</a></li>
+                                                  <li><a t-attf-href="/checklist/cancel/{{slug(project['project'])}}">Cancel</a></li>
+                                                </ul>
+                                            </div>
+                                         </div>
+                                        <!-- End cancel or done -->
+
+                                        <div class="checklist-body" style="display:none" t-attf-id="checklist_#{project_index}">
+                                            <ol class="tasklist">
+
+                                                <t t-foreach="project['tasks']" t-as="task">
+                                                    <t t-if="task.prev">
+                                                        <t t-if="task.stage_id.name == 'Started'">
+                                                            <li class="current-task"><a t-attf-href="/task/{{ slug(task) }}" ><t t-esc="task.name"/></a></li>
+                                                        </t>
+                                                        <t t-if="task.stage_id.name == 'Done'">
+                                                            <li><a t-attf-href="/task/{{ slug(task) }}" ><s><t t-esc="task.name"/></s></a></li>
+                                                        </t>
+                                                        <t t-if="task.stage_id.name == 'Skipped'">
+                                                            <li class="skipped-task"><a t-attf-href="/task/{{ slug(task) }}" ><t t-esc="task.name"/></a></li>
+                                                        </t>
+                                                        <t t-if ="task.stage_id.name != 'Started' and task.stage_id.name != 'Done' and task.stage_id.name != 'Skipped' ">
+                                                            <li><a t-attf-href="/task/{{ slug(task) }}" ><t t-esc="task.name"/></a></li>
+                                                        </t>
+                                                    </t>
+                                                    <t t-if="not task.prev">
+                                                        <li><a href="javascript:void(0)" ><t t-esc="task.name"/></a></li>
+                                                    </t>
+                                                </t> <!-- t-foreach -->
+                                            </ol>
+
+                                            <div class="col-xs-12">
+                                                <button t-attf-id="add_new_#{project['project'].id}" class="add_new_task btn btn-primary btn-xs"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                                            </div>
+                                            <div t-attf-id="add_new_from_#{project['project'].id}" class="col-xs-12 hidden add_new_from">
+                                                <form method="POST" action="#" class="form_add_new_task">
+                                                    <div class="form-group">
+                                                        <input type="text" autocomplete="off" class="form-control" t-attf-id="taskname_#{project['project'].id}" placeholder="Task Name" name="task_name"/>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <textarea name="task_desc" placeholder="Description" class="form-control" t-attf-id="taskdesc_#{project['project'].id}" ></textarea>
+                                                    </div>
+                                                    <div class="form-group form-group-sm">
+                                                        <label class="control-label">Estimated Time</label>
+                                                        <div class="row">
+                                                            <div class="col-xs-6">
+                                                                <input type="number" min="0" max="12" class="form-control input-sm est_hr estimatetime" t-attf-id="taskestimate_hr_#{project['project'].id}" placeholder="Hours" name="estimate_hr" />
+                                                            </div>
+                                                            <div class="col-xs-6">
+                                                                <input type="number" min="0" max="60" class="form-control input-sm est_min estimatetime" t-attf-id="taskestimate_min_#{project['project'].id}" placeholder="Minutes" name="estimate_min" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <button t-attf-data-title="#taskname_#{project['project'].id}" t-attf-data-hour="#taskestimate_hr_#{project['project'].id}" t-attf-data-minute="#taskestimate_min_#{project['project'].id}" t-attf-data-desc="#taskdesc_#{project['project'].id}" type="submit" class="btn btn-primary btn-sm add_new_save">Save</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </t><!-- t-foreach -->
+                                <t t-if="not projects">
+                                    <div class="col-sm-12 xs-pt-10 text-center">You have no active checklists</div>
+                                </t>
+                            </div>
+                        </div>
+
+                        <!-- Completed Checklists -->
+                        <div class="tab-pane fade" id="completed">
+                            <div class="checklist-wrap">
+                                <t t-foreach="completed" t-as="completed_project">
+                                    <div class="checklist-item-completed clearfix checklist-bar">
+                                        <t t-set="titletext" t-value="'title-text'"/>
+                                        <t t-if="completed_project['project'].state == 'cancelled'">
+                                             <t t-set="titletext" t-value="'title-text canceled'"/>
+                                        </t>
+                                        <div class="checklist-title">
+                                            <i class="fa fa-address-card-o hov" aria-hidden="true"
+                                               data-toggle="popover"
+                                               data-container="body"
+                                               t-att-data-content="completed_project['customer'].name"
+                                               t-att-data-mobile="completed_project['customer'].mobile"
+                                               t-att-data-phone="completed_project['customer'].phone"
+                                               t-att-data-street="completed_project['customer'].street"
+                                               t-att-data-name="completed_project['customer'].name"></i>
+                                            <div t-att-class="titletext" t-attf-data-checklist="#checklistcom_#{completed_project_index}">
+                                                <span class="checklist-name"><t t-esc="completed_project['project'].display_name"/></span>
+                                                <span class="checklist-date"><t t-esc="completed_project['project'].date_start"/></span>
+                                                <input type="hidden" class="project_id" t-att-value="completed_project['project'].id"/>
+                                            </div>
+                                        </div>
+                                        <div class="checklist-body" style="display:none" t-attf-id="checklistcom_#{completed_project_index}">
+                                            <ol class="tasklist">
+                                                <t t-foreach="completed_project['tasks']" t-as="comp_task">
+                                                    <t t-if ="comp_task.stage_id.name != 'Done' and comp_task.stage_id.name != 'Skipped' ">
+                                                         <li><a t-attf-href="/task/{{ slug(comp_task) }}" ><t t-esc="comp_task.name"/></a></li>
+                                                    </t>
+                                                    <t t-if="comp_task.stage_id.name == 'Skipped'">
+                                                            <li class="skipped-task"><a t-attf-href="/task/{{ slug(comp_task) }}" ><t t-esc="comp_task.name"/></a></li>
+                                                    </t>
+                                                    <t t-if ="comp_task.stage_id.name == 'Done' ">
+                                                        <li><a t-attf-href="/task/{{ slug(comp_task) }}" ><s><t t-esc="comp_task.name"/></s></a></li>
+                                                    </t>
+                                                </t>
+                                            </ol>
+                                            <div class="col-xs-12">
+                                                <button t-attf-id="add_new_#{completed_project['project'].id}" class="add_new_task btn btn-primary btn-xs"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                                            </div>
+                                            <div t-attf-id="add_new_from_#{completed_project['project'].id}" class="col-xs-12 hidden add_new_from">
+                                                <form method="POST" action="#" class="form_add_new_task">
+                                                    <div class="form-group">
+                                                        <input type="text" autocomplete="off" class="form-control" t-attf-id="taskname_#{completed_project['project'].id}" placeholder="Task Name" name="task_name"/>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <textarea name="task_desc" placeholder="Description" class="form-control" t-attf-id="taskdesc_#{completed_project['project'].id}" ></textarea>
+                                                    </div>
+                                                    <div class="form-group form-group-sm">
+                                                        <label class="control-label">Estimated Time</label>
+                                                        <div class="row">
+                                                            <div class="col-xs-6">
+                                                                <input type="number" min="0" max="12" class="form-control input-sm est_hr estimatetime" t-attf-id="taskestimate_hr_#{completed_project['project'].id}" placeholder="Hours" name="estimate_hr" />
+                                                            </div>
+                                                            <div class="col-xs-6">
+                                                                <input type="number" min="0" max="60" class="form-control input-sm est_min estimatetime" t-attf-id="taskestimate_min_#{completed_project['project'].id}" placeholder="Minutes" name="estimate_min" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <button t-attf-data-title="#taskname_#{completed_project['project'].id}" t-attf-data-hour="#taskestimate_hr_#{completed_project['project'].id}" t-attf-data-minute="#taskestimate_min_#{completed_project['project'].id}" t-attf-data-desc="#taskdesc_#{completed_project['project'].id}" type="submit" class="btn btn-primary btn-sm add_new_save">Save</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div><!-- checklist-item -->
+                                </t>
+                                <t t-if="not completed">
+                                    <div class="col-sm-12 xs-pt-10 text-center">You have no completed checklists</div>
+                                </t>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+        <!--################## Task detail view ##################-->
+        <template id="taskdetailview">
+            <t t-call="checklist_front.layout">
+                <t t-set="title">Checklist App</t>
+                <t t-set="pageheader">
+                   <a t-attf-href="/checklist/checklist/##{slug(taskdetails.project_id)}" class="back-btn"><i class="fa fa-chevron-left fa-2x" aria-hidden="true"></i></a>
+                    <span class="screen-name"><t t-esc="taskdetails.project_id.name" /></span>
+                </t>
+
+                <div class="app-content inner">
+                    <div class="inner-page clearfix">
+                        <div class="col-xs-10">
+                            <span class="task-name"><t t-esc="task_sq_no" />. <t t-esc="taskdetails.name"/></span>
+                            <p><t t-esc="taskdetails.description"/></p>
+                        </div>
+                        <div class="col-xs-2">
+                            <div class="pdf-btn-container">
+                                <!--<a href="http://www.pdf995.com/samples/pdf.pdf"><i class="fa fa-info-circle fa-2x" aria-hidden="true"></i></a>-->
+                            </div>
+                        </div>
+
+                        <!-- Task actions buttons -->
+                        <t t-if="taskdetails.project_id.state != 'close' and taskdetails.project_id.state != 'cancelled' and taskdetails.project_id.state != 'completed'">
+                            <div class="task-action-btns clearfix xs-pb-20 xs-mb-20">
+                                <t t-if="taskdetails.show_button_start">
+                                    <t t-set="start" t-value="'Start '"/>
+                                    <t t-if="pause">
+                                        <t t-set="start" t-value="'Resume '"/>
+                                    </t>
+                                    <button class="btn btn-success start-btn status-btn" id="start-task"  data-status="start"><t t-esc="start"/><i class="fa fa-play" aria-hidden="true"></i></button></t><t t-if="taskdetails.show_button_done">
+                                    <button class="btn btn-warning pause-btn status-btn" id="pause-task"  data-status="pause">Pause <i class="fa fa-pause" aria-hidden="true"></i></button></t><t t-if="taskdetails.show_button_skip"><button class="btn btn-success skip-btn status-btn" id="skip-task"  data-status="skip">Skip <i class="fa fa-step-forward" aria-hidden="true"></i></button></t><t t-if="taskdetails.show_button_done">
+                                    <button class="btn btn-success pull-right end-btn status-btn" id="task-done"   data-status="end">Done <i class="fa fa-check" aria-hidden="true"></i></button></t>
+                            </div>
+                        </t>
+
+                        <!-- Task remarks -->
+                        <div class="taskremarks clearfix xs-mb-20 clear">
+                            <p class="lead">Add Details</p>
+                            <div class="form-group xs-mb-10"><textarea name="remarks" id="remarks" class="form-control" ><t t-esc="taskdetails.notes"/> </textarea></div>
+                            <div class="form-group xs-mb-10"><button id="remarksave" class="btn btn-primary">Save </button></div>
+                        </div>
+
+                        <!-- CAM Images -->
+                        <div class="attachments-section  clearfix">
+                            <span class="lead">Capture / Attach Image</span>
+                            <label for="capture" id="camera" class="btn btn-circle pull-right"><i class="fa fa-camera fa-2x" aria-hidden="true"></i></label>
+                            <input type="file" class="hidden image-capture" accept="image/*" id="capture" />
+                            <!--<label for="upimage" id="lblupimage" class="btn btn-circle pull-right"><i class="fa fa-paperclip fa-2x" aria-hidden="true"></i></label>-->
+                            <!--<input type="file" class="hidden image-capture" accept="image/*" id="upimage"/>-->
+                            <div class="thumbs-wrap clearfix xs-pt-30" id="thumbnails">
+                                <t t-foreach="taskdetails.cam_images" t-as="image">
+                                    <div class="cam_img_block col-xs-4">
+                                        <div class="thumbnail"><i class="fa fa-times remove-img"></i>
+                                            <img t-attf-id="capture-img_#{image_index}" t-att-src="'data:image/png;base64,'+image.db_datas" alt="Capture image" />
+                                            <input type="hidden" class="img_att_id" t-attf-id="image_id_#{image_index}" t-att-value="image.id" />
+                                        </div>
+                                    </div>
+                                </t>
+                                <div id="loader-wrapper" class="hidden">
+                                    <div id="loader"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!-- inner-page -->
+                    <input type="hidden" id="task_id" t-att-value="taskdetails.id"/>
+                </div> <!-- app-content -->
+
+                <!-- PDF Reader Modal -->
+                <div class="modal fade" id="pdf-modal" tabindex="-1" role="dialog">
+                  <div class="modal-dialog" role="document">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fa fa-times"></i></span></button>
+                    <div class="modal-content">
+                      <div class="modal-body">
+                          <div id="help-pdf"></div>
+                      </div>
+                      <div class="modal-footer">
+                      </div>
+                    </div><!-- /.modal-content -->
+                  </div><!-- /.modal-dialog -->
+                </div><!-- /.modal -->
+            </t>
+        </template>
+
+        <!--################## Signature pad and checklist finish ##################-->
+        <template id="checklist_signature">
+            <t t-call="checklist_front.layout">
+                <t t-set="title">Checklist App</t>
+                <t t-set="pageheader">
+                   <a href="/checklist/checklist" class="back-btn"><i class="fa fa-chevron-left fa-2x" aria-hidden="true"></i></a>
+                    <span class="screen-name">Finish Checklist</span>
+                    <!--<a href="javascript:void(0)" class="app-name">Welcome <t t-esc="user.name"/></a>-->
+                </t>
+                <div class="app-content inner">
+                    <div class="inner-page clearfix">
+                        <div><label>Checklist Name: <strong><t t-esc="project.display_name"/></strong></label></div>
+                        <div><label>Customer Name: <strong><t t-esc="customer.name"/></strong></label></div>
+                        <div><label>Location: <strong><t t-esc="customer.street"/></strong></label></div>
+                        <div>
+                            <form id="accept" method="POST" t-attf-action="/project/sign/#{project.id}" class="js_checklist_accept_json">
+                                <div class="form-group">
+                                    <input type="text" autocomplete="false" class="form-control" id="cust_name" placeholder="Name" name="cust_name"/>
+                                </div>
+                                <label for="signature" class="control-label">Signature: </label>
+                                <div class="thumbnail">
+                                    <img src="" alt="signature" id="signatureimage" style="display:none;" />
+                                    <img src="/checklist_front/static/img/signature-pad2.png" alt="signature" id="signature-pad" />
+                                </div>
+                                <textarea id="note" rows="4" class="form-control" placeholder="Note"></textarea>
+                                <div class="xs-mt-20">
+                                    <input type="hidden" id="project_id" t-att-value="project.id" />
+                                    <button type="submit" id="sign" class="btn btn-primary btn-circle btn-floating"><i class="fa fa-check fa-2x" aria-hidden="true"></i></button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="signature-modal" tabindex="-1" role="dialog">
+                  <div class="modal-dialog" role="document">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fa fa-times"></i></span></button>
+                    <div class="modal-content">
+                      <div class="modal-body">
+                          <div class="pull-right">
+                                <a id="sign_clean" class="btn btn-xs sign_clean">Clear</a>
+                          </div>
+                        <div id="signature" class="panel-body" style="padding: 0;"/>
+                      </div>
+                      <div class="modal-footer">
+                        <button id="signature-ok" class="btn btn-primary ">Ok</button>
+                      </div>
+                    </div><!-- /.modal-content -->
+                  </div><!-- /.modal-dialog -->
+                </div><!-- /.modal -->
+            </t>
+        </template>
+
+        <!--################## Checklist cancel ##################-->
+        <template id="checklist_cancel">
+            <t t-call="checklist_front.layout">
+                <t t-set="title">Checklist App</t>
+                <t t-set="pageheader">
+                    <a href="/checklist/checklist" class="back-btn"><i class="fa fa-chevron-left" aria-hidden="true"></i></a>
+                    <span class="screen-name">Cancel Checklist</span>
+                    <!--<a href="javascript:void(0)" class="app-name">Welcome <t t-esc="user.name"/></a>-->
+                </t>
+                <div class="app-content inner">
+                    <div class="inner-page clearfix">
+                        <label>Name: <strong><t t-esc="project.display_name"/> </strong></label>
+                        <form id="savenote" method="POST" t-attf-action="/project/cancel/#{project.id}" class="savenote">
+                            <div class="form-group">
+                                <label for="note" class="control-label">Note: </label>
+                                <textarea id="note" rows="4" class="form-control" placeholder="Reason to cancel"></textarea>
+                            </div>
+                            <input type="hidden" id="project_id" t-att-value="project.id" />
+                            <button id="savenote-btn" type="submit" class="btn btn-primary pull-right">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+        <!--################## Change password template ##################-->
+        <template id="change_password_checklist">
+            <t t-call="checklist_front.layout">
+                <t t-set="title">Checklist App</t>
+                <t t-set="pageheader">
+                    <a href="/checklist/checklist" class="back-btn"><i class="fa fa-chevron-left" aria-hidden="true"></i></a>
+                    <span class="screen-name">Change Password</span>
+                    <!--<a href="javascript:void(0)" class="app-name">Welcome <t t-esc="user.name"/></a>-->
+                </t>
+                <div class="app-content inner">
+                    <div class="inner-page clearfix">
+                        <form name="change_password_form" method="POST">
+                            <div class="form-group">
+                                <label for="old_pwd" class="control-label">Old Password:</label>
+                                <input type="password" class="form-control" name="old_pwd" minlength="1" autofocus="autofocus"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="new_password" class="control-label">New Password:</label>
+                                <input type="password" class="form-control" name="new_password" minlength="1"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="confirm_pwd" class="control-label">Confirm New Password:</label>
+                                <input type="password" class="form-control" name="confirm_pwd" minlength="1"/>
+                            </div>
+                            <button type="button" class='change_password btn btn-primary'>Save</button>
+                      </form>
+                    </div>
+                </div>
+            </t>        
+        </template>
+
+        <!--################## Page not found(404) error template ##################-->
+        <template id="404" inherit_id="website.404">
+            <xpath expr="t" position="replace">
+                <t t-call="checklist_front.layout">
+                    <t t-set="checklisthome" t-value="false"/>
+                    <t t-set="title">Not Found</t>
+                    <t t-set="pageheader">
+                        <h4>Page Not found</h4>
+                    </t>
+                <div id="app-content">
+                    <t t-raw="0"/>
+                    <div class="oe_structure oe_empty">
+                        <div class="container">
+                            <h1 class="mt32">404</h1>
+                            <p>
+                                Oops! PAGE NOT FOUND.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                </t>
+            </xpath>
+        </template>
+
+        <!--################## Unauthorised access(403) Page template ##################-->
+        <template id="403" inherit_id="website.403">
+            <xpath expr="t" position="replace">
+                <t t-call="checklist_front.layout">
+                    <t t-set="checklisthome" t-value="false"/>
+                    <t t-set="title">Not Found</t>
+                    <t t-set="pageheader">
+                        <h4>Unauthorised access</h4>
+                    </t>
+                <div id="app-content">
+                    <t t-raw="0"/>
+                    <div class="oe_structure oe_empty">
+                        <div class="container">
+                            <h1 class="mt32">403</h1>
+                            <p>
+                                Unauthorised access.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                </t>
+            </xpath>
+        </template>
+
+    </data>
+</openerp>
+

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="checklist_front_rule" model="ir.rule">
+            <field ref="project.model_project_project" name="model_id"/>
+            <field eval="True" name="global"/>
+            <field name="domain_force">[('user_id', 'in', [user.id])]</field>
+        </record>
+
+        <record id="checklist_user_group" model="res.groups">
+            <field name="name">Checklist front-end user</field>
+            <field name="comment">Group for front-end users.</field>
+        </record>
+    </data>
+</openerp>
