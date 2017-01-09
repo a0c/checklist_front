@@ -216,7 +216,7 @@
                 </t>
 
                 <div class="app-content inner">
-                    <div class="inner-page clearfix">
+                    <div class="inner-page clearfix container-fluid">
                         <div class="col-xs-10">
                             <span class="task-name"><t t-esc="task_sq_no" />. <t t-esc="taskdetails.name"/></span>
                             <p><t t-esc="taskdetails.description"/></p>
@@ -245,6 +245,19 @@
                         <div class="taskremarks clearfix xs-mb-20 clear">
                             <p class="lead">Add Details</p>
                             <div class="form-group xs-mb-10"><textarea name="remarks" id="remarks" class="form-control" ><t t-esc="taskdetails.notes"/> </textarea></div>
+                             <t t-if="taskdetails.is_extra">
+                                <div class="form-group xs-mb-10">
+                                    <label class="control-label">Estimated Time</label>
+                                    <div class="row">
+                                        <div class="col-xs-6">
+                                            <input type="number" min="0" max="12" class="form-control input-sm est_hr estimatetime" t-att-value="extra_time['hours']" id="taskestimate_hr" placeholder="Hours" name="estimate_hr" />
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <input type="number" min="0" max="60" class="form-control input-sm est_min estimatetime" t-att-value="extra_time['minutes']" id="taskestimate_min" placeholder="Minutes" name="estimate_min" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </t>
                             <div class="form-group xs-mb-10"><button id="remarksave" class="btn btn-primary">Save </button></div>
                         </div>
 

@@ -74,7 +74,8 @@ class Checklistfront(http.Controller):
             'taskdetails': task,
             'task_sq_no' : task_sq_no,
             'status': status,
-            'pause': pause
+            'pause': pause,
+            'extra_time': self.show_extra_hours(task.extra_hours)
         })
 
 #   Get task number for a given task
@@ -88,13 +89,25 @@ class Checklistfront(http.Controller):
             if tk == task:
                 return idx + 1
 
+
+    def show_extra_hours(self,value):
+        hours = 0
+        minutes = 0
+        if value:
+            min = float(value) * 60.0
+            hours = float(min)//60.0
+            hours = int(hours)
+            minutes = float(min)%60.0
+            minutes = int(minutes)
+        return {'hours': hours,'minutes': minutes}
+
 #   Save task remarks
     @http.route(['/task/remarks'], type='json', auth="user", website=True)
-    def save_remarks(self, task_id, remarks, **post):
-        project_obj = http.request.env['project.task']
-        project = project_obj.browse([task_id])
-        project.write({'notes': remarks})
-        return {'message': _('Remarks saved'), 'status': 'success'}
+    def save_remarks(self, task_id, remarks,extra_time, **post):
+        task_obj = http.request.env['project.task']
+        task = task_obj.browse([task_id])
+        task.write({'notes': remarks,'extra_hours': extra_time})
+        return {'message': _('Details saved'), 'status': 'success'}
 
 #   Get previous task status by next_task field
     def previous_task_by_next_task(self,current_task):

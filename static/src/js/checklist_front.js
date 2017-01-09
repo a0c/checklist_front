@@ -27,10 +27,14 @@ $(function(){
     // Save remarks for task
     function saveRemarks(){
         var remarks = $.trim($('#remarks').val());
+        var hours = $.trim($('#taskestimate_hr').val());
+        var minute = $.trim($('#taskestimate_min').val());
+        var extra = extra_time(hours,minute);
         var task_id = $("#task_id").val();
             openerp.jsonRpc("/task/remarks", 'call', {
             'task_id': parseInt(task_id),
             'remarks': remarks,
+            'extra_time': extra
         }).then(function (data) {
             toast(data.message);
         });
@@ -391,7 +395,7 @@ $(function(){
         var project_id = $(checklist).find('.project_id').val();
         var hours = $($(that).data('hour')).val().trim()?  $($(that).data('hour')).val().trim() : 0;
         var minute = $($(that).data('minute')).val().trim()? $($(that).data('minute')).val().trim() : 0;
-        var extra_hours = hours+':'+minute;
+        var extra_hours = extra_time(hours,minute);
         if(title.length != 0 && desc.length != 0 && project_id.length !=0){
             openerp.jsonRpc("/task/create/", 'call', {
                 'project_id' : project_id,
@@ -415,6 +419,9 @@ $(function(){
         }
     });
 
+     function extra_time(hours,minutes){
+        return hours+':'+minutes;
+     }
 // Create new li in task listing
     function create_task_li(name,url){
         var html = '<li><a href="'+url+'">'+name+'</a></li>';
