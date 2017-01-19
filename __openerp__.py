@@ -31,8 +31,6 @@
     'depends': ['web','website','checklist','project'],
     'data': [
         'view/project_website_template.xml',
-        'security/checklist_front_security.xml',
-        'security/ir.model.access.csv',
         'view/checklist_front_view.xml',
         'view/project.xml',
         # 'view/websitemenu.xml',
