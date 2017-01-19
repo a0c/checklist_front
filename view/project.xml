@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <openerp>
     <data>
-        <!-- Create Group -->
-        <record id="technician" model="res.groups">
-            <field name="name" >Technician</field>
-        </record>
         <record id="menu_project" model="website.menu">
             <field name="name">Projects</field>
             <field name="url">/checklist/checklist</field>
