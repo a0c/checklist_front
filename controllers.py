@@ -193,7 +193,7 @@ class Checklistfront(http.Controller):
     def accept(self, project_id, sign=None, cust_name=None,note=None, **post):
         project_obj = http.request.env['project.project']
         project = project_obj.browse([project_id])
-        project.message_post(body=note)
+        project.message_post(body=note and 'DONE: ' + note or note)
         completed = self.is_tasks_done(project)  # check is all task are done
         if completed:
             end = fmt(datetime.now())
@@ -221,7 +221,7 @@ class Checklistfront(http.Controller):
     def save_cancel_note(self, project_id, note):
         project_obj = http.request.env['project.project']
         project = project_obj.browse([int(project_id)])
-        project.message_post(body=note)
+        project.message_post(body='CANCELLED: ' + note)
         end = fmt(datetime.now())
         project.write({'state': 'cancelled','date': end});
         return {'message': _('Checklist canceled'),'redirect': '/checklist/checklist'}
