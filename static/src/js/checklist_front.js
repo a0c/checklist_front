@@ -473,7 +473,11 @@ $(document).ready(function(){
        var street = $(this).data('street') == null? "" : $(this).data('street');
        var phno = $(this).data('phone') == null ? "" : "PhNo :"+$(this).data('phone');
        var mobile = $(this).data('mobile') == null ? "" : "Mob : "+$(this).data('mobile');
-       html = '<div><strong>'+name+'</strong></div><div>'+street+'</div><div>'+mobile+'</div><div>'+phno+'</div>';
+       var model = $(this).data('model') == null ? "" : "Model : "+$(this).data('model');
+       var serial = $(this).data('serial') == null ? "" : "S/N : "+$(this).data('serial');
+       var descr = $(this).data('description') == null ? "" : $(this).data('description');
+       html = '<div><strong>'+name+'</strong></div><div>'+street+'</div><div>'+mobile+'</div><div>'+phno+'</div><div>'
+           +model+'</div><div>'+serial+'</div><div>'+descr+'</div>';
        $(this).attr('data-content', html);
     });
 
