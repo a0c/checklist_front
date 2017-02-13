@@ -39,7 +39,7 @@ class Checklistfront(http.Controller):
 
             if project.state in ['completed','cancelled']:
                 completed.append(my_dict)
-            elif project.state == 'open':
+            elif project.state in ['open', 'draft']:
                 active.append(my_dict)
 
         active_sorted = sorted(active, key=lambda k: k['start'])  # sort active projects by start date
