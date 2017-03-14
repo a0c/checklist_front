@@ -21,7 +21,7 @@ class Checklistfront(http.Controller):
         done = http.request.env.ref('project.project_tt_deployment')
         project_ob = http.request.env['project.project']
         projects = project_ob.search([('state', '!=', 'close'), ('rh_job_number', '!=', 0), ('user_id', '=', uid)])
-        for project in projects:
+        for project in projects.sudo():
             status = 'done'
             task_list = []
             customer = pool['res.partner'].browse(cr, SUPERUSER_ID, project.partner_id.id, context=context)
