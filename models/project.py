@@ -1,16 +1,8 @@
-# from openerp import models, fields, api
 from openerp import models, fields, api
 from datetime import datetime
-from openerp.addons.checklist.models.utils import prs, fmt, diff
+from openerp.addons.checklist.models.utils import fmt
 
 
-class project(models.Model):
-    _inherit = 'project.project'
-
-    #signature = fields.Binary(string="Signature")
-    # signee = fields.Text('Name')
-    
-    
 class ProjecTTask(models.Model):
     
     _inherit = 'project.task'
@@ -41,10 +33,3 @@ class ProjecTTask(models.Model):
     cam_images = fields.Many2many('ir.attachment', compute='_get_cam_images', string='Images')
     #cam_images = fields.One2many('ir.attachment', 'project_task_id', string='Images')
     #remarks = fields.Text('Remarks')
-    
-    
-class IRAttachment(models.Model):
-    
-    _inherit = 'ir.attachment'
-    
-    # project_task_id =  fields.Many2one('project.task', string='Project Task')
