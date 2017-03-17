@@ -471,12 +471,12 @@ $(document).ready(function(){
        $('.hov').not(this).popover('hide');
        var name = $(this).data('name') == null? "" : $(this).data('name');
        var street = $(this).data('street') == null? "" : $(this).data('street');
-       var phno = $(this).data('phone') == null ? "" : "PhNo :"+$(this).data('phone');
-       var mobile = $(this).data('mobile') == null ? "" : "Mob : "+$(this).data('mobile');
-       var model = $(this).data('model') == null ? "" : "Model : "+$(this).data('model');
-       var serial = $(this).data('serial') == null ? "" : "S/N : "+$(this).data('serial');
+       var phno = $(this).data('phone') == null ? "" : "Phone: "+$(this).data('phone');
+       var cont = $(this).data('contact') == null ? "" : "Contact: "+$(this).data('contact');
+       var model = $(this).data('model') == null ? "" : "Model: "+$(this).data('model');
+       var serial = $(this).data('serial') == null ? "" : "S/N: "+$(this).data('serial');
        var descr = $(this).data('description') == null ? "" : $(this).data('description');
-       html = '<div><strong>'+name+'</strong></div><div>'+street+'</div><div>'+mobile+'</div><div>'+phno+'</div><div>'
+       html = '<div><strong>'+name+'</strong></div><div>'+street+'</div><div>'+cont+'</div><div>'+phno+'</div><div>'
            +model+'</div><div>'+serial+'</div><div>'+descr+'</div>';
        $(this).attr('data-content', html);
     });

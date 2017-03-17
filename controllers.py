@@ -35,7 +35,8 @@ class Checklistfront(http.Controller):
                 task.prev = self.previous_task(task)  # check previous task completed
                 task_list.append(task)
             is_completed = self.is_tasks_done(project)
-            my_dict = {'project': project,'start': project.date_start,'end': project.date, 'tasks': task_list, 'customer': customer, 'status': status, 'all_done' : is_completed}
+            my_dict = {'project': project,'start': project.date_start,'end': project.date, 'tasks': task_list,
+                       'customer': customer, 'status': status, 'all_done' : is_completed, 'contact': project.contact}
 
             if project.state in ['completed','cancelled']:
                 completed.append(my_dict)

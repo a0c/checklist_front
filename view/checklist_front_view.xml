@@ -43,13 +43,14 @@
                                             <div t-att-class="checklisttitle">
                                                 <i class="fa fa-address-card-o hov" aria-hidden="true"
                                                    data-toggle="popover"
+                                                   data-placement="bottom"
                                                    data-container="body"
-                                                   t-att-data-description="project['project'].description"
+                                                   t-att-data-description="(project['project'].description or '').replace('\n','&lt;br/&gt;')"
                                                    t-att-data-serial="project['project'].quant.lot_id.name"
                                                    t-att-data-model="project['project'].quant.product_id.default_code"
                                                    t-att-data-content="project['customer'].name"
-                                                   t-att-data-mobile="project['customer'].mobile"
-                                                   t-att-data-phone="project['customer'].phone"
+                                                   t-att-data-phone="project['contact'].phone"
+                                                   t-att-data-contact="project['contact'].name"
                                                    t-att-data-street="project['customer'].street"
                                                    t-att-data-name="project['customer'].name">
 
@@ -143,13 +144,14 @@
                                         <div class="checklist-title">
                                             <i class="fa fa-address-card-o hov" aria-hidden="true"
                                                data-toggle="popover"
+                                               data-placement="bottom"
                                                data-container="body"
-                                               t-att-data-description="completed_project['project'].description"
+                                               t-att-data-description="(completed_project['project'].description or '').replace('\n','&lt;br/&gt;')"
                                                t-att-data-serial="completed_project['project'].quant.lot_id.name"
                                                t-att-data-model="completed_project['project'].quant.product_id.default_code"
                                                t-att-data-content="completed_project['customer'].name"
-                                               t-att-data-mobile="completed_project['customer'].mobile"
-                                               t-att-data-phone="completed_project['customer'].phone"
+                                               t-att-data-phone="completed_project['contact'].phone"
+                                               t-att-data-contact="completed_project['contact'].name"
                                                t-att-data-street="completed_project['customer'].street"
                                                t-att-data-name="completed_project['customer'].name"></i>
                                             <div t-att-class="titletext" t-attf-data-checklist="#checklistcom_#{completed_project_index}">
