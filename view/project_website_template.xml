@@ -79,6 +79,7 @@
                 and main_object.website_meta_keywords or website_meta_keywords"/>
             <meta name="generator" content="Odoo"/>
             <title><t t-esc="title"/></title>
+            <link rel="shortcut icon" href="/web/static/src/img/icons/gtk-apply.png" type="image/x-icon"/>
 
             <t t-set="languages" t-value="website.get_languages() if website else None"/>
             <t t-if="request and request.website_multilang and website">
