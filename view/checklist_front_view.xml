@@ -56,7 +56,10 @@
 
                                                 </i>
                                                 <div class="title-text" t-attf-data-checklist="#checklist_#{project_index}" t-att-data-project="slug(project['project'])" >
-                                                    <span class="checklist-name"><t t-esc="project['project'].display_name"/></span>
+                                                    <span class="checklist-name">
+                                                      <b><t t-esc="project['project'].rh_job_number"/></b>
+                                                      <t t-esc="project['project'].title"/>
+                                                    </span>
                                                     <span class="checklist-date"><t t-esc="project['project'].date_start"/></span>
                                                     <input type="hidden" class="project_id" t-att-value="project['project'].id"/>
                                                 </div>
@@ -155,7 +158,10 @@
                                                t-att-data-street="completed_project['customer'].street"
                                                t-att-data-name="completed_project['customer'].name"></i>
                                             <div t-att-class="titletext" t-attf-data-checklist="#checklistcom_#{completed_project_index}">
-                                                <span class="checklist-name"><t t-esc="completed_project['project'].display_name"/></span>
+                                                <span class="checklist-name">
+                                                  <b><t t-esc="completed_project['project'].rh_job_number"/></b>
+                                                  <t t-esc="completed_project['project'].title"/>
+                                                </span>
                                                 <span class="checklist-date"><t t-esc="completed_project['project'].date_start"/></span>
                                                 <input type="hidden" class="project_id" t-att-value="completed_project['project'].id"/>
                                             </div>
