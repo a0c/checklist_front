@@ -471,7 +471,7 @@ $(document).ready(function(){
        $('.hov').not(this).popover('hide');
        var name = $(this).data('name') == null? "" : $(this).data('name');
        var street = $(this).data('street') == null? "" : $(this).data('street');
-       var phno = $(this).data('phone') == null ? "" : "Phone: "+$(this).data('phone');
+       var phno = $(this).data('phone') == null ? "" : "Phone: <a href=\"tel:"+$(this).data('phone')+"\">"+$(this).data('phone')+"</a>";
        var cont = $(this).data('contact') == null ? "" : "Contact: "+$(this).data('contact');
        var model = $(this).data('model') == null ? "" : "Model: "+$(this).data('model');
        var serial = $(this).data('serial') == null ? "" : "S/N: "+$(this).data('serial');
