@@ -263,6 +263,11 @@
                                     Skip <i class="fa fa-step-forward" aria-hidden="true"></i>
                                   </button>
                                 </t>
+                                <t t-if="taskdetails.show_button_skip">
+                                  <button class="btn btn-success skip-na-btn status-btn" id="skip-na-task" data-status="skip-na">
+                                    N/A <i class="fa fa-step-forward" aria-hidden="true"></i>
+                                  </button>
+                                </t>
                                 <t t-if="taskdetails.show_button_done">
                                   <button class="btn btn-success pull-right end-btn status-btn" id="task-done" data-status="end">
                                     Done <i class="fa fa-check" aria-hidden="true"></i>

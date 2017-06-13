@@ -150,8 +150,8 @@ class Checklistfront(http.Controller):
         elif status == 'pause':
             task.action_pause()
             return {'message': _('Task paused'), 'status': 'pause'}
-        elif status == 'skip':
-            task.action_skip()
+        elif status in ('skip', 'skip-na'):
+            task.action_skip(is_skipped=status == 'skip')
             rtn = self.return_array(task)
             rtn['message'] = _('Task skipped.')
             return rtn

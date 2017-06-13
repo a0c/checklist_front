@@ -60,12 +60,14 @@ $(function(){
                         var pause_btn = create_action_buttons('pause','Pause','pause','btn-warning','pause-task');
                         var end_btn = create_action_buttons('end','Done','check','btn-success pull-right','task-done');
                         var skip_btn = create_action_buttons('skip','Skip','step-forward','btn-success','skip-task');
-                        $('.task-action-btns').html(pause_btn+skip_btn+end_btn);
+                        var skip_na_btn = create_action_buttons('skip-na','N/A','step-forward','btn-success','skip-na-task');
+                        $('.task-action-btns').html(pause_btn+skip_btn+skip_na_btn+end_btn);
                         break;
                     case 'pause':
                          var start_btn = create_action_buttons('start','Resume','play','btn-success','start-task');
                          var skip_btn = create_action_buttons('skip','Skip','step-forward','btn-success','skip-task');
-                         $('.task-action-btns').html(start_btn+skip_btn);
+                         var skip_na_btn = create_action_buttons('skip-na','N/A','step-forward','btn-success','skip-na-task');
+                         $('.task-action-btns').html(start_btn+skip_btn+skip_na_btn);
                         break;
                     case 'end':
                         $('.task-action-btns').html("");
