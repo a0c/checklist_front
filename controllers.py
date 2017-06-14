@@ -1,4 +1,10 @@
 # -*- coding: utf-8 -*-
+import base64
+import cairo
+import os
+import rsvg
+from tempfile import NamedTemporaryFile
+
 from openerp import http
 from datetime import datetime
 from openerp.http import request
@@ -191,7 +197,7 @@ class Checklistfront(http.Controller):
 
 #   Save signature and close checklist.
     @http.route(['/project/sign'], type='json', auth="user", website=True)
-    def accept(self, project_id, sign=None, cust_name=None,note=None, **post):
+    def accept(self, project_id, sign=None, sign_svg=None, cust_name=None,note=None, **post):
         project_obj = http.request.env['project.project']
         project = project_obj.browse([project_id])
         project.message_post(body=note and 'DONE: ' + note or note)
@@ -199,10 +205,28 @@ class Checklistfront(http.Controller):
         if completed:
             end = fmt(datetime.now())
             attachments = sign and [('signature.png', sign.decode('base64'))] or []
+            if sign_svg:
+                sign = self.svg_to_png(sign_svg)
             project.write({'signature': sign,'signee': cust_name})
             project.action_complete()
             return {'message': _('Checklist finished'),'redirect': '/checklist/checklist'}
         return {'message': _('Checklist have unfinished tasks'),'redirect': '/checklist/checklist'}
+
+    def svg_to_png(self, sign_svg):
+        sign = base64.decodestring(sign_svg)
+        handle = rsvg.Handle(None, sign)
+        size = handle.get_dimension_data()
+
+        img = cairo.ImageSurface(cairo.FORMAT_ARGB32, size[0], size[1])
+        ctx = cairo.Context(img)
+        handle.render_cairo(ctx)
+
+        with NamedTemporaryFile(delete=False) as temp_file:
+            img.write_to_png(temp_file)
+        with open(temp_file.name, 'rb') as tmp_file:
+            sign = base64.b64encode(tmp_file.read())
+        os.remove(temp_file.name)
+        return sign
 
 #   Check all task are done for given project
     def is_tasks_done(self, project):

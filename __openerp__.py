@@ -29,6 +29,7 @@
     'author': 'eram',
     'website': 'https://www.odoo.com/page/crm',
     'depends': ['web','website','checklist','project'],
+    'external_dependencies': {'python': ['cairo', 'rsvg']},
     'data': [
         'view/project_website_template.xml',
         'view/checklist_front_view.xml',

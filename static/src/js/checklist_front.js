@@ -275,6 +275,7 @@ $(function(){
         if($("#signature").jSignature('getData', 'native').length != 0){
             var project_id = $('#project_id').val();
             var sign = $("#signature").jSignature("getData",'image');
+            var sign_svg = sign && (!sign[1] || $.trim(sign[1]) == "") ? $("#signature").jSignature("getData", "svgbase64") : false;
             var name = $.trim($("#cust_name").val());
             var note = $.trim($("#note").val());
             if(name == ""){
@@ -284,6 +285,7 @@ $(function(){
             openerp.jsonRpc("/project/sign", 'call', {
                 'project_id': parseInt(project_id),
                 'sign': sign?JSON.stringify(sign[1]):false,
+                'sign_svg': sign_svg?JSON.stringify(sign_svg[1]):false,
                 'cust_name': name,
                 'note':note,
             }).then(function (data) {
