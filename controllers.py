@@ -200,7 +200,8 @@ class Checklistfront(http.Controller):
     def accept(self, project_id, sign=None, sign_svg=None, cust_name=None,note=None, **post):
         project_obj = http.request.env['project.project']
         project = project_obj.browse([project_id])
-        project.message_post(body=note and 'DONE: ' + note or note)
+        if note:
+            project.message_post(body=note and 'DONE: ' + note or note)
         completed = self.is_tasks_done(project)  # check is all task are done
         if completed:
             end = fmt(datetime.now())
