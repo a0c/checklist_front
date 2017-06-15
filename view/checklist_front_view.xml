@@ -88,7 +88,10 @@
                                                         <t t-if="task.stage_id.name == 'Skipped'">
                                                             <li class="skipped-task"><a t-attf-href="/task/{{ slug(task) }}" ><t t-esc="task.name"/></a></li>
                                                         </t>
-                                                        <t t-if ="task.stage_id.name != 'Started' and task.stage_id.name != 'Done' and task.stage_id.name != 'Skipped' ">
+                                                        <t t-if="task.stage_id.name == 'Not Applicable'">
+                                                            <li><a t-attf-href="/task/{{ slug(task) }}"><i><t t-esc="task.name"/> - N/A</i></a></li>
+                                                        </t>
+                                                        <t t-if ="task.stage_id.name not in ['Started', 'Done', 'Skipped', 'Not Applicable']">
                                                             <li><a t-attf-href="/task/{{ slug(task) }}" ><t t-esc="task.name"/></a></li>
                                                         </t>
                                                     </t>
@@ -169,7 +172,7 @@
                                         <div class="checklist-body" style="display:none" t-attf-id="checklistcom_#{completed_project_index}">
                                             <ol class="tasklist">
                                                 <t t-foreach="completed_project['tasks']" t-as="comp_task">
-                                                    <t t-if ="comp_task.stage_id.name != 'Done' and comp_task.stage_id.name != 'Skipped' ">
+                                                    <t t-if ="comp_task.stage_id.name not in ['Done', 'Skipped', 'Not Applicable'] ">
                                                          <li><a t-attf-href="/task/{{ slug(comp_task) }}" ><t t-esc="comp_task.name"/></a></li>
                                                     </t>
                                                     <t t-if="comp_task.stage_id.name == 'Skipped'">
@@ -177,6 +180,9 @@
                                                     </t>
                                                     <t t-if ="comp_task.stage_id.name == 'Done' ">
                                                         <li><a t-attf-href="/task/{{ slug(comp_task) }}" ><s><t t-esc="comp_task.name"/></s></a></li>
+                                                    </t>
+                                                    <t t-if="comp_task.stage_id.name == 'Not Applicable'">
+                                                        <li><a t-attf-href="/task/{{ slug(comp_task) }}"><i><t t-esc="comp_task.name"/> - N/A</i></a></li>
                                                     </t>
                                                 </t>
                                             </ol>
@@ -264,7 +270,7 @@
                                   </button>
                                 </t>
                                 <t t-if="taskdetails.show_button_skip">
-                                  <button class="btn btn-success skip-na-btn status-btn" id="skip-na-task" data-status="skip-na">
+                                  <button class="btn btn-success na-btn status-btn" id="na-task" data-status="na">
                                     N/A <i class="fa fa-step-forward" aria-hidden="true"></i>
                                   </button>
                                 </t>

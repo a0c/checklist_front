@@ -132,14 +132,9 @@ class Checklistfront(http.Controller):
 
 #   Get previous task status by sequence field
     def previous_task(self, current_task):
-        skipped = http.request.env.ref('checklist.project_tt_skipped')
-        done = http.request.env.ref('project.project_tt_deployment')
-        tasks_obj = http.request.env['project.task']
-        tasks = tasks_obj.search(['&',('sequence', '<', current_task.sequence),('project_id','=',current_task.project_id.id)])
-        for task in tasks:
-            if task.stage_id not in[done,skipped]:
-                return False
-        return True
+        done, started, unstarted, skipped, na = current_task._get_checklist_stages()
+        prev_tasks_todo = current_task.project_id.tasks.filtered(lambda x: x.sequence < current_task.sequence and x.stage_id not in [done, skipped, na])
+        return not prev_tasks_todo
 
 #   Change status
     @http.route(['/task/status/'], type='json', auth="user", website=True)
@@ -156,7 +151,7 @@ class Checklistfront(http.Controller):
         elif status == 'pause':
             task.action_pause()
             return {'message': _('Task paused'), 'status': 'pause'}
-        elif status in ('skip', 'skip-na'):
+        elif status in ('skip', 'na'):
             task.action_skip(is_skipped=status == 'skip')
             rtn = self.return_array(task)
             rtn['message'] = _('Task skipped.')
@@ -231,16 +226,9 @@ class Checklistfront(http.Controller):
 
 #   Check all task are done for given project
     def is_tasks_done(self, project):
-        started, unstarted = [http.request.env.ref('checklist.' + st) for st in
-                                    'project_tt_started', 'project_tt_unstarted']
-        skipped = http.request.env.ref('checklist.project_tt_skipped')
-        done = http.request.env.ref('project.project_tt_deployment')
-        tasks_obj = http.request.env['project.task']
-        tasks = tasks_obj.search([('project_id', '=', project.id)])
-        for task in tasks:
-            if task.stage_id not in [done,skipped]:
-                return False
-        return True
+        done, started, unstarted, skipped, na = project.tasks._get_checklist_stages()
+        tasks_todo = project.tasks.filtered(lambda x: x.stage_id not in [done, skipped, na])
+        return not tasks_todo
 
 #   Save cancel note and cancel the checklist
     @http.route(['/project/cancelnote/'], type='json', auth="user", website=True)
