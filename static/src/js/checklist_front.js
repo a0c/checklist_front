@@ -59,13 +59,13 @@ $(function(){
                     case 'start':
                         var pause_btn = create_action_buttons('pause','Pause','pause','btn-warning','pause-task');
                         var end_btn = create_action_buttons('end','Done','check','btn-success pull-right','task-done');
-                        var skip_btn = create_action_buttons('skip','Skip','step-forward','btn-success','skip-task');
+                        var skip_btn = create_action_buttons('skip','Issue','step-forward','btn-danger','skip-task');
                         var na_btn = create_action_buttons('na','N/A','step-forward','btn-success','na-task');
                         $('.task-action-btns').html(pause_btn+skip_btn+na_btn+end_btn);
                         break;
                     case 'pause':
                          var start_btn = create_action_buttons('start','Resume','play','btn-success','start-task');
-                         var skip_btn = create_action_buttons('skip','Skip','step-forward','btn-success','skip-task');
+                         var skip_btn = create_action_buttons('skip','Issue','step-forward','btn-danger','skip-task');
                          var na_btn = create_action_buttons('na','N/A','step-forward','btn-success','na-task');
                          $('.task-action-btns').html(start_btn+skip_btn+na_btn);
                         break;
@@ -100,7 +100,7 @@ $(function(){
 
     // Task action button html
     function create_action_buttons(action,label,icon,btn_type,id){
-        return '<button id="'+id+'" class="btn '+btn_type+' '+action+'-btn status-btn"  data-status="'+action+'">'+label+' <i class="fa fa-'+icon+'" aria-hidden="true"></i></button>';
+        return '<button id="'+id+'" class="btn '+btn_type+' '+action+'-btn status-btn xs-pr-10 xs-pl-10"  data-status="'+action+'">'+label+' <i class="fa fa-'+icon+'" aria-hidden="true"></i></button>';
     }
 
     // Capture image

@@ -7557,7 +7557,7 @@ body {
   body {
     padding-top: 61px; } }
 .app-header {
-  padding: 13px 10px;
+  padding: 0 10px;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
   z-index: 1061;
   display: table;

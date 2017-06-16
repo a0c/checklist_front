@@ -255,27 +255,27 @@
                                     <t t-if="pause">
                                         <t t-set="start" t-value="'Resume '"/>
                                     </t>
-                                    <button class="btn btn-success start-btn status-btn" id="start-task" data-status="start">
+                                    <button class="btn btn-success start-btn status-btn xs-pr-10 xs-pl-10" id="start-task" data-status="start">
                                       <t t-esc="start"/><i class="fa fa-play" aria-hidden="true"></i>
                                     </button>
                                 </t>
                                 <t t-if="taskdetails.show_button_done">
-                                  <button class="btn btn-warning pause-btn status-btn" id="pause-task" data-status="pause">
+                                  <button class="btn btn-warning pause-btn status-btn xs-pr-10 xs-pl-10" id="pause-task" data-status="pause">
                                     Pause <i class="fa fa-pause" aria-hidden="true"></i>
                                   </button>
                                 </t>
                                 <t t-if="taskdetails.show_button_skip">
-                                  <button class="btn btn-success skip-btn status-btn" id="skip-task" data-status="skip">
-                                    Skip <i class="fa fa-step-forward" aria-hidden="true"></i>
+                                  <button class="btn btn-danger skip-btn status-btn xs-pr-10 xs-pl-10" id="skip-task" data-status="skip">
+                                    Issue <i class="fa fa-step-forward" aria-hidden="true"></i>
                                   </button>
                                 </t>
                                 <t t-if="taskdetails.show_button_skip">
-                                  <button class="btn btn-success na-btn status-btn" id="na-task" data-status="na">
+                                  <button class="btn btn-success na-btn status-btn xs-pr-10 xs-pl-10" id="na-task" data-status="na">
                                     N/A <i class="fa fa-step-forward" aria-hidden="true"></i>
                                   </button>
                                 </t>
                                 <t t-if="taskdetails.show_button_done">
-                                  <button class="btn btn-success pull-right end-btn status-btn" id="task-done" data-status="end">
+                                  <button class="btn btn-success pull-right end-btn status-btn xs-pr-10 xs-pl-10" id="task-done" data-status="end">
                                     Done <i class="fa fa-check" aria-hidden="true"></i>
                                   </button>
                                 </t>
