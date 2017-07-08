@@ -192,18 +192,16 @@ class Checklistfront(http.Controller):
 
 #   Save signature and close checklist.
     @http.route(['/project/sign'], type='json', auth="user", website=True)
-    def accept(self, project_id, sign=None, sign_svg=None, cust_name=None,note=None, **post):
+    def accept(self, project_id, sign=None, sign_svg=None, cust_name=None, note=None, **post):
         project_obj = http.request.env['project.project']
         project = project_obj.browse([project_id])
-        if note:
-            project.message_post(body=note and 'DONE: ' + note or note)
         completed = self.is_tasks_done(project)  # check is all task are done
         if completed:
             end = fmt(datetime.now())
             attachments = sign and [('signature.png', sign.decode('base64'))] or []
             if sign_svg:
                 sign = self.svg_to_png(sign_svg)
-            project.write({'signature': sign,'signee': cust_name})
+            project.write({'signature': sign, 'signee': cust_name, 'notes': note})
             project.action_complete()
             return {'message': _('Checklist finished'),'redirect': '/checklist/checklist'}
         return {'message': _('Checklist have unfinished tasks'),'redirect': '/checklist/checklist'}
@@ -235,9 +233,8 @@ class Checklistfront(http.Controller):
     def save_cancel_note(self, project_id, note):
         project_obj = http.request.env['project.project']
         project = project_obj.browse([int(project_id)])
-        project.message_post(body='CANCELLED: ' + note)
         end = fmt(datetime.now())
-        project.write({'state': 'cancelled','date': end});
+        project.write({'state': 'cancelled', 'date': end, 'notes': note})
         return {'message': _('Checklist canceled'),'redirect': '/checklist/checklist'}
 
 #   Load reset password template
