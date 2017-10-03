@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import base64
 import cairo
+import logging
 import os
 import rsvg
 from tempfile import NamedTemporaryFile
@@ -13,6 +14,8 @@ from openerp.tools.translate import _
 from openerp.addons.website.models.website import slug
 from openerp.addons.checklist.models.utils import prs, fmt, diff
 import operator
+
+_logger = logging.getLogger(__name__)
 
 
 class Checklistfront(http.Controller):
@@ -199,6 +202,9 @@ class Checklistfront(http.Controller):
         if completed:
             end = fmt(datetime.now())
             attachments = sign and [('signature.png', sign.decode('base64'))] or []
+            _logger.info('%s signed CL #%s (RH=%s):\nsign: %s\nsign_svg: %s' %
+                         (project.env.user.name, project.id, project.rh_job_number,
+                          len(sign) <= 2000 and sign or '(>2K chars: %sx)' % len(sign), sign_svg))
             if sign_svg:
                 sign = self.svg_to_png(sign_svg)
             project.write({'signature': sign, 'signee': cust_name, 'notes': note})

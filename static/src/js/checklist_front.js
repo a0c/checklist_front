@@ -276,6 +276,10 @@ $(function(){
             var project_id = $('#project_id').val();
             var sign = $("#signature").jSignature("getData",'image');
             var sign_svg = sign && (!sign[1] || $.trim(sign[1]) == "") ? $("#signature").jSignature("getData", "svgbase64") : false;
+            if (sign_svg && sign_svg[1].length <= 900 || !sign_svg && sign && sign[1].length <= 1500) {
+                toast("Signature too short. Try Opening & Closing signature.");
+                return false;
+            }
             var name = $.trim($("#cust_name").val());
             var note = $.trim($("#note").val());
             if(name == ""){
