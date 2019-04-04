@@ -29,7 +29,8 @@ class Checklistfront(http.Controller):
         started, unstarted = [http.request.env.ref('checklist.' + st) for st in 'project_tt_started', 'project_tt_unstarted']
         done = http.request.env.ref('project.project_tt_deployment')
         project_ob = http.request.env['project.project']
-        projects = project_ob.search([('state', '!=', 'close'), ('rh_job_number', '!=', 0), ('user_id', '=', uid)])
+        projects = project_ob.search([('state', '!=', 'close'), ('type_cl', '=', 'onsite'),
+                                      ('rh_job_number', '!=', False), ('user_id', '=', uid)])
         for project in projects.sudo():
             status = 'done'
             task_list = []
