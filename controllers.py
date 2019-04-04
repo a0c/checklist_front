@@ -29,7 +29,7 @@ class Checklistfront(http.Controller):
         started, unstarted = [http.request.env.ref('checklist.' + st) for st in 'project_tt_started', 'project_tt_unstarted']
         done = http.request.env.ref('project.project_tt_deployment')
         project_ob = http.request.env['project.project']
-        projects = project_ob.search([('state', '!=', 'close'), ('type_cl', '=', 'onsite'),
+        projects = project_ob.search([('state', 'not in', ['close', 'cancelled']), ('type_cl', '=', 'onsite'),
                                       ('rh_job_number', '!=', False), ('user_id', '=', uid)])
         for project in projects.sudo():
             status = 'done'
@@ -56,6 +56,7 @@ class Checklistfront(http.Controller):
         active_sorted = sorted(active, key=lambda k: k['start'])  # sort active projects by start date
         completed_sorted = sorted(completed, key=lambda k: k['end'], reverse=True)  # sort completed projects by end date
 
+        _logger.info('%sx Active CLs, %sx Completed CLs for %s' % (len(active_sorted), len(completed_sorted), project_ob.env.user.name))
         return http.request.render('checklist_front.projectview', {
             'projects': active_sorted,  # current checklist
             'completed': completed_sorted,  # completed checklist
