@@ -5,7 +5,7 @@
             <field name="name">Projects</field>
             <field name="url">/checklist/checklist</field>
             <field name="parent_id" ref="website.main_menu"/>
-            <field name="sequence" type="int">1</field>
+            <field name="sequence" type="int">5</field>
         </record>
         <record id="action_open_project_checklist6" model="ir.actions.act_url">
             <field name="name">My Projects</field>
