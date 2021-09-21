@@ -270,7 +270,7 @@ class Checklistfront(http.Controller):
     @http.route(['/project/task/images'], type='json', auth="user", website=True)
     def save_task_image(self, task_id, image=None):
         att_ob = http.request.env['ir.attachment']
-        res = att_ob.sudo().create({'res_model': 'project.task', 'res_id':int(task_id), 'type': 'binary', 'db_datas': image,'name':'cam_img'})
+        res = att_ob.sudo().create({'res_model': 'project.task', 'res_id':int(task_id), 'type': 'binary', 'db_datas': image,'name':'cam_img.jpeg'})
         return {'att_id': res.id}
     
 #   Remove cam image

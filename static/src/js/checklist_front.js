@@ -181,11 +181,14 @@ $(function(){
                 var ctx = canvas.getContext("2d");
                 ctx.drawImage(img, 0, 0, width, height);
 
-                var imageData = grayScale(ctx,img);
-                // overwrite original image
-                ctx.putImageData(imageData, 0, 0);
+                // Switch to colour images. Leave grayscale commented out, just in case.
+                // var imageData = grayScale(ctx,img);
+                // // overwrite original image
+                // ctx.putImageData(imageData, 0, 0);
 
-                var dataurl = canvas.toDataURL("image/png");
+                // Switch from PNG to JPEG to reduce color image size:
+                // 675KB gray PNG => 1.2MB color PNG => 162KB color JPEG
+                var dataurl = canvas.toDataURL("image/jpeg");
                 var img_data = dataurl.replace(/^data:image\/(png|jpg|jpeg);base64,/, "");
                 var task_id = $("#task_id").val();
                 openerp.jsonRpc("/project/task/images", 'call', {
